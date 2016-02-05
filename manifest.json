@@ -1,7 +1,7 @@
 {
 	"app": {
 		"launch": {
-			"local_path": "webshellapp.html",
+			"local_path": "base.html",
 			"content_security_policy": " "
 		}
 	},
@@ -87,7 +87,7 @@
 
 	"app": {
 		"background": {
-			"scripts": ["Foundation/com.dangeredwolf.webshell.io/io.js"]
+			"scripts": ["background.js"]
 		}
 	}
 }

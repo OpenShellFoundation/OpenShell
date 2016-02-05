@@ -1,6 +1,14 @@
-// OpenShell Modular Class System
-// (c) 2016 The OpenShell Foundation
-// (c) 2016 Ryan Dolan (dangeredwolf)
+/*
+OpenShell Modular Class System
+
+Provides an abstract way to modularise OpenShell
+
+(c) 2016 The OpenShell Foundation
+(c) 2016 Ryan Dolan (dangeredwolf)
+
+Released under the GNU Public License (GPL) Version 2
+
+*/
 
 "use strict";
 
@@ -21,6 +29,7 @@ function assertion(statement,message) {
 function Module(data){
     if (!ignoreInvalidMetadata) {
         assertion(typeof data !== "object","Module needs argument of type object, got " + typeof data);
+        assertion(typeof data.humanname !== "string","Required module value 'humanname' should be string, got " + typeof data.humanname);
         assertion(typeof data.name !== "string","Required module value 'name' should be string, got " + typeof data.name);
         assertion(typeof data.id !== "string","Required module value 'id' should be string, got " + typeof data.id);
         assertion(typeof data.author !== "string","Required module value 'author' should be string, got " + typeof data.author);
@@ -32,11 +41,18 @@ function Module(data){
 
     switch (data.class) {
         case "library": {
-            if (typeof data.func !== "function") {
-                throw "Module value function 'func' required for type 'library', got " + typeof data.func;
+            if (typeof data.func !== "function" && typeof data.func !== "string") {
+                throw "Module value function/string 'func' required for type 'library', got " + typeof data.func;
+            }
+            if (typeof data.func === "string") {
+                var script = document.createElement("head");
+                script.type = "text/javascript";
+                script.src = data.func;
+                document.head.appendChild(script); // Once started, it should add itself to libraries object
+            } else {
+                libraries[data.name] = data.func; // Add via module metadata parser
             }
 
-            libraries[data.name] = data.func;
             break;
         }
         case "autorun": {
@@ -54,7 +70,10 @@ function Module(data){
 
     }
 
+    console.log("Loaded module " + data.name + " (" + data.id + ")");
+
     loadedModules[loadedModules.length] = data.id;
+    loadedModules[loadedModules.length] = data.name;
     loadedModuleNames[loadedModuleNames.length] = data.name;
     loadedModuleMetadata[loadedModuleMetadata.length] = data;
 
@@ -64,7 +83,10 @@ function verifyDependencies() {
 
     if (ignoreDependencyErrors) {
         console.log("Skipping dependency check...");
+        return;
     }
+
+    console.log("Performing dependency check...");
 
     for (var a = 0; a < loadedModuleMetadata.length; a++) {
         var hasUnmetDependencies = false;
@@ -84,7 +106,7 @@ function verifyDependencies() {
             }
 
             if (hasUnmetDependencies) {
-                throw "Package " + loadedModuleMetadata[a].name || "error" + " has unmet dependencies. Make sure libraries are initialised first.  If you're still having trouble, enable ignoreDependencyErrors";
+                throw "Package " + loadedModuleMetadata[a].name || "missingno" + " has unmet dependencies. Make sure libraries are initialised first.  If you're still having trouble, enable ignoreDependencyErrors";
             }
         }
     }
