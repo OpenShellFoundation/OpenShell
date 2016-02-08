@@ -1,3 +1,5 @@
+"use strict";
+
 const workspacesSupported = chrome.app.window.canSetVisibleOnAllWorkspaces();
 
 chrome.app.runtime.onLaunched.addListener(function() {

@@ -89,17 +89,18 @@ function verifyDependencies() {
     for (var a = 0; a < loadedModuleMetadata.length; a++) {
         var hasUnmetDependencies = false;
 
-        if (typeof loadedModuleMetadata[a] === "object" && typeof loadedModuleMetadata[a].dependencies === "object") {
-            for (var i = 0; i < loadedModuleMetadata[a].dependencies.length; i++) {
+        if (typeof loadedModuleMetadata[a] === "object" && typeof loadedModuleMetadata[a].depends === "object") {
+            for (var i = 0; i < loadedModuleMetadata[a].depends.length; i++) {
                 var available = false;
                 for (var j = 0; j < loadedModules.length; j++) {
-                    if (loadedModules[j] === loadedModuleMetadata[a].dependencies[i]) {
+                    if (loadedModules[j] === loadedModuleMetadata[a].depends[i]) {
                         available = true;
+                        console.error("Required Dependency " + loadedModules[j] + " is OK");
                         break;
                     }
                 }
                 if (!available) {
-                    console.error("Unmet dependency!!!: " + loadedModuleMetadata[a].dependencies[i]);
+                    console.error("Unmet dependency!!!: " + loadedModuleMetadata[a].depends[i]);
                 }
             }
 
@@ -110,10 +111,12 @@ function verifyDependencies() {
     }
 }
 
-function modulesAreDoneLoading() {
+function beginInit() {
     verifyDependencies();
 
     console.log("Starting autorunFuncs");
+
+    assertion(autorunFuncs.length > -1,"CRITICAL ISSUE: There is no initialization candidate declared by the packages.js file. OpenShell cannot continue to launch!!");
 
     for (var j = 0; j < autorunFuncs.length; j++) {
         if (typeof autorunFuncs[j] === "function") {

@@ -1,3 +1,5 @@
+"use strict";
+
 var packageClass = document.createElement("script");
 packageClass.src = "moduleclass.js";
 document.head.appendChild(packageClass);
