@@ -28,37 +28,35 @@ function assertion(statement,message) {
 
 function Module(data){
     if (!ignoreInvalidMetadata) {
-        assertion(typeof data !== "object","Module needs argument of type object, got " + typeof data);
-        assertion(typeof data.humanname !== "string","Required module value 'humanname' should be string, got " + typeof data.humanname);
-        assertion(typeof data.name !== "string","Required module value 'name' should be string, got " + typeof data.name);
-        assertion(typeof data.id !== "string","Required module value 'id' should be string, got " + typeof data.id);
-        assertion(typeof data.author !== "string","Required module value 'author' should be string, got " + typeof data.author);
-        assertion(typeof data.version !== "string","Required module value 'version' should be string, got " + typeof data.version);
-        assertion(typeof data.versionMajor !== "number","Required module value 'versionMajor' should be number, got " + typeof data.versionMajor + ". If you aren't using this value, set it to 0");
-        assertion(typeof data.versionMinor !== "number","Required module value 'versionMinor' should be number, got " + typeof data.versionMinor + ". If you aren't using this value, set it to 0");
-        assertion(typeof data.versionPatch !== "number","Required module value 'versionPatch' should be number, got " + typeof data.versionPatch + ". If you aren't using this value, set it to 0");
+        assertion(typeof data === "object","Module needs argument of type object, got " + typeof data);
+        assertion(typeof data.humanname === "string","Required module value 'humanname' should be string, got " + typeof data.humanname);
+        assertion(typeof data.name === "string","Required module value 'name' should be string, got " + typeof data.name);
+        assertion(typeof data.id === "string","Required module value 'id' should be string, got " + typeof data.id);
+        assertion(typeof data.class === "string","Required module value 'class' should be string, got " + typeof data.class);
+        assertion(typeof data.author === "string","Required module value 'author' should be string, got " + typeof data.author);
+        assertion(typeof data.version === "string","Required module value 'version' should be string, got " + typeof data.version);
+        assertion(typeof data.versionMajor === "number","Required module value 'versionMajor' should be number, got " + typeof data.versionMajor + ". If you aren't using this value, set it to 0");
+        assertion(typeof data.versionMinor === "number","Required module value 'versionMinor' should be number, got " + typeof data.versionMinor + ". If you aren't using this value, set it to 0");
+        assertion(typeof data.versionPatch === "number","Required module value 'versionPatch' should be number, got " + typeof data.versionPatch + ". If you aren't using this value, set it to 0");
     }
 
     switch (data.class) {
         case "library": {
-            if (typeof data.func !== "function" && typeof data.func !== "string") {
-                throw "Module value function/string 'func' required for type 'library', got " + typeof data.func;
-            }
-            if (typeof data.func === "string") {
-                var script = document.createElement("head");
-                script.type = "text/javascript";
-                script.src = data.func;
-                document.head.appendChild(script); // Once started, it should add itself to libraries object
-            } else {
-                libraries[data.name] = data.func; // Add via module metadata parser
-            }
+          assertion(typeof data.func === "function" || typeof data.func === "string","Module value function OR string 'func' required for type 'library', got " + typeof data.func);
+
+          if (typeof data.func === "string") {
+              var script = document.createElement("script");
+              script.type = "text/javascript";
+              script.src = data.func;
+              document.head.appendChild(script); // Once started, it should add itself to libraries object
+          } else {
+              libraries[data.name] = data.func; // Add via module metadata parser
+          }
 
             break;
         }
         case "autorun": {
-            if (typeof data.func !== "function") {
-                throw "Module value function 'func' required for type 'autorun', got " + typeof data.func;
-            }
+            assertion(typeof data.func === "function" || typeof data.func === "string","Module value function OR string 'func' required for type 'autorun', got " + typeof data.func);
 
             autorunFuncs[autorunFuncs.length] = data.func;
             break;
@@ -110,4 +108,25 @@ function verifyDependencies() {
             }
         }
     }
+}
+
+function modulesAreDoneLoading() {
+    verifyDependencies();
+
+    console.log("Starting autorunFuncs");
+
+    for (var j = 0; j < autorunFuncs.length; j++) {
+        if (typeof autorunFuncs[j] === "function") {
+          setTimeout(autorunFuncs[j],0);
+          console.log("autorunFuncs " + j + " started as function");
+        } else if (typeof autorunFuncs[j] === "string") {
+          var script = document.createElement("script");
+          script.type = "text/javascript";
+          script.src = autorunFuncs[j];
+          document.head.appendChild(script);
+          console.log("autorunFuncs " + j + " started as script");
+        } else {
+          assertion(typeof autorunFuncs[j] === "function","autorunFuncs " + j + " is not a function nor string!!");
+        }
+      }
 }

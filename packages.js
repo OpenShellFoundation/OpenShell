@@ -19,7 +19,8 @@ var jQueryPackage = new Module({
   versionMinor:1,
   versionPatch:4,
   version:"2.1.4",
-  func:"PackageFiles/init/osinit.js"
+  func:"PackageFiles/init/osinit.js",
+  class:"library"
 });
 
 var initScript = new Module({
@@ -31,5 +32,8 @@ var initScript = new Module({
   version:"1.0",
   author:"dangeredwolf/OpenShell Foundation",
   id:"com.dangeredwolf.openshell.init",
-  func:"PackageFiles/init/osinit.js"
+  func:"PackageFiles/init/osinit.js",
+  class:"autorun"
 });
+
+modulesAreDoneLoading();
