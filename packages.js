@@ -41,6 +41,7 @@ var windowClass = new Module({
   versionPatch:0,
   version:"1.0",
   depends:["jquery"],
+  doubleStart:true,
   func:"PackageFiles/jqueryAdditions/jqueryAdditions.js",
   class:"library"
 });

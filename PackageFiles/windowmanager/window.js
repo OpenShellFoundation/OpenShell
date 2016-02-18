@@ -13,167 +13,209 @@ Released under the GNU Public License (GPL) Version 2
 "use strict";
 
 function Window(data) {
-  assertion(typeof data === "object","Argument 1, data, expects object, but got " + typeof data);
-  assertion(typeof data.url === "string","Property 'url' of object Window expects string, but got " + typeof data.url);
-  this.sizeX = data.sizeX || 700;
-  this.sizeY = data.sizeY || 400;
-  this.posX = data.posX || ($("html").width() / 2) - (this.sizeX / 2);
-  this.posY = data.posY || ($("html").height() / 2) - (this.sizeY / 2);
 
-  this.windowID = Math.floor(Math.random() * 1234567890)
+    var windowx = make("div").addClass("windowContainer");
 
-  this.opened = data.opened || true;
-  this.title = data.title || "Window";
+    assertion(typeof data === "object","Argument 1, data, expects object, but got " + typeof data);
+    assertion(typeof data.url === "string","Property 'url' of object Window expects string, but got " + typeof data.url);
+    windowx.sizeX = data.sizeX || 700;
+    windowx.sizeY = data.sizeY || 400;
+    windowx.posX = data.posX || ($("html").width() / 2) - (windowx.sizeX / 2);
+    windowx.posY = data.posY || ($("html").height() / 2) - (windowx.sizeY / 2);
 
-  this.windowObjectTitle = make("div")
-  .addClass("windowTitle")
-  .html(this.title);
+    windowx.windowID = Math.floor(Math.random() * 1234567890)
 
-  this.windowObjectControlClose = make("div")
-  .addClass("windowControl windowControlClose");
+    windowx.opened = data.opened || true;
+    windowx.title = data.title || "Window";
 
-  this.windowObjectControlMaximize = make("div")
-  .addClass("windowControl windowControlMaximize");
+    windowx.windowObjectTitle = make("div")
+    .addClass("windowTitle")
+    .html(windowx.title);
 
-  this.windowObjectControlMinimize = make("div")
-  .addClass("windowControl windowControlMinimize");
+    windowx.windowObjectControlClose = make("div")
+    .addClass("windowControl windowControlClose");
 
-  this.windowObjectControlContainer = make("div")
-  .addClass("windowControlContainer")
-  .append(this.windowObjectControlClose)
-  .append(this.windowObjectControlMaximize)
-  .append(this.windowObjectControlMinimize)
-  .append(this.windowObjectTitle);
+    windowx.windowObjectControlMaximize = make("div")
+    .addClass("windowControl windowControlMaximize");
 
-  this.windowObjectContent = make("webview")
-  .addClass("windowContent");
+    windowx.windowObjectControlMinimize = make("div")
+    .addClass("windowControl windowControlMinimize");
 
-  this.windowObjectContentRaw = this.windowObjectContent[0];
+    windowx.windowObjectControlContainer = make("div")
+    .addClass("windowControlContainer")
+    .append(windowx.windowObjectControlClose)
+    .append(windowx.windowObjectControlMaximize)
+    .append(windowx.windowObjectControlMinimize)
+    .append(windowx.windowObjectTitle);
 
-  this.windowObjectContainer = make("div")
-  .addClass("windowContainer")
-  .append(this.windowObjectControlContainer)
-  .append(this.windowObjectContent);
+    windowx.windowObjectContent = make("webview")
+    .addClass("windowContent");
 
-  this.setSizeX = function(num) {
-    assertion(typeof num !== "number","setSizeX expects number, got " + typeof num);
-    this.sizeX = num;
-  }
+    windowx.windowObjectContentRaw = windowx.windowObjectContent[0];
 
-  this.setSizeY = function(num) {
-    assertion(typeof num !== "number","setSizeY expects number, got " + typeof num);
-    this.sizeY = num;
-  }
+    windowx
+    .append(windowx.windowObjectControlContainer)
+    .append(windowx.windowObjectContent);
 
-  this.setPosX = function(num) {
-    assertion(typeof num !== "number","setPosX expects number, got " + typeof num);
-    this.posX = num;
-  }
+    windowx.setSizeX = function(num) {
+        assertion(typeof num !== "number","setSizeX expects number, got " + typeof num);
+        windowx.sizeX = num;
+        return windowx;
+    }
 
-  this.setPosY = function(num) {
-    assertion(typeof num !== "number","setPosY expects number, got " + typeof num);
-    this.posY = num;
-  }
+    windowx.setSizeY = function(num) {
+        assertion(typeof num !== "number","setSizeY expects number, got " + typeof num);
+        windowx.sizeY = num;
+        return windowx;
+    }
 
-  this.setTitle = function(name) {
-      assertion(typeof name === "undefined","setTitle expects string or object, got undefined");
-      this.windowTitle.html(name);
-  }
+    windowx.setPosX = function(num) {
+        assertion(typeof num !== "number","setPosX expects number, got " + typeof num);
+        windowx.posX = num;
+        return windowx;
+    }
 
-  this.close = function() {
-      this.windowObjectContainer.addClass("windowContainerClosed");
+    windowx.setPosY = function(num) {
+        assertion(typeof num !== "number","setPosY expects number, got " + typeof num);
+        windowx.posY = num;
+        return windowx;
+    }
 
-      setTimeout(function(){
-          this.windowObjectContainer.remove();
-      },3000)
-  }
+    windowx.setTitle = function(name) {
+        assertion(typeof name === "undefined","setTitle expects string or object, got undefined");
+        windowx.windowTitle.html(name);
+        return windowx;
+    }
 
-  this.terminateProcess = function() {
-      this.close();
-      return this.windowObjectContentRaw.terminate();
-  }
+    windowx.close = function() {
+        windowx.addClass("windowContainerClosed");
 
-  this.stopLoading = function() {
-    return this.windowObjectContentRaw.stop();
-  }
+        setTimeout(function(){
+            windowx.remove();
+        },3000);
 
-  this.stopFinding = function() {
-    return this.windowObjectContentRaw.stopFinding();
-  }
+        return windowx;
+    }
 
-  this.goBack = function() {
-    return this.windowObjectContentRaw.back();
-  }
+    windowx.minimize = function() {
+        windowx.addClass("minimized");
+        return windowx;
+    }
 
-  this.goForward = function() {
-    return this.windowObjectContentRaw.forward();
-  }
+    windowx.terminateProcess = function() {
+        windowx.close();
+        return windowx.windowObjectContentRaw.terminate();
+    }
 
-  this.insertCSS = function(a,b) {
-    return this.windowObjectContentRaw.insertCSS(a,b);
-  }
+    windowx.stopLoading = function() {
+        windowx.windowObjectContentRaw.stop();
+        return windowx;
+    }
 
-  this.setZoom = function(a,b) {
-    return this.windowObjectContentRaw.setZoom(a,b);
-  }
+    windowx.stopFinding = function() {
+        windowx.windowObjectContentRaw.stopFinding();
+        return windowx;
+    }
 
-  this.setZoomMode = function(a,b) {
-    return this.windowObjectContentRaw.setZoomMode(a,b);
-  }
+    windowx.goBack = function() {
+        windowx.windowObjectContentRaw.back();
+        return windowx;
+    }
 
-  this.printContentPage = function() {
-    return this.windowObjectContentRaw.print();
-  }
+    windowx.goForward = function() {
+        windowx.windowObjectContentRaw.forward();
+        return windowx;
+    }
 
-  this.goToRelativeHistoryPoint = function(a,b) {
-    return this.windowObjectContentRaw.go(a,b);
-  }
+    windowx.insertCSS = function(a,b) {
+        windowx.windowObjectContentRaw.insertCSS(a,b);
+        return windowx;
+    }
 
-  this.removeContentScripts = function() {
-    return this.windowObjectContentRaw.removeContentScripts();
-  }
+    windowx.setZoom = function(a,b) {
+        windowx.windowObjectContentRaw.setZoom(a,b);
+        return windowx;
+    }
 
-  this.reloadContent = function() {
-    return this.windowObjectContentRaw.reload();
-  }
+    windowx.setZoomMode = function(a,b) {
+        windowx.windowObjectContentRaw.setZoomMode(a,b);
+        return windowx;
+    }
 
-  this.findInContent = function(a,b,c) {
-    return this.windowObjectContentRaw.find();
-  }
+    windowx.getZoom = function(a) {
+        return windowx.windowObjectContentRaw.getZoom(a);
+    }
 
-  this.clearUserData = function(a,b,c) {
-    return this.windowObjectContentRaw.clearData(a,b,c);
-  }
+    windowx.getZoomMode = function(a) {
+        return windowx.windowObjectContentRaw.getZoomMode(a);
+    }
 
-  this.executeScript = function(a,b) {
-    return this.windowObjectContentRaw.executeScript(a,b);
-  }
+    windowx.printContentPage = function() {
+        windowx.windowObjectContentRaw.print();
+        return windowx;
+    }
 
-  this.addContentScripts = function(a) {
-    return this.windowObjectContentRaw.addContentScripts(a);
-  }
+    windowx.goToRelativeHistoryPoint = function(a,b) {
+        windowx.windowObjectContentRaw.go(a,b);
+        return windowx;
+    }
 
-  this.canGoBack = function() {
-    return this.windowObjectContentRaw.canGoBack();
-  }
+    windowx.removeContentScripts = function(a,b) {
+        windowx.windowObjectContentRaw.removeContentScripts(a,b);
+        return windowx;
+    }
 
-  this.canGoForward = function() {
-    return this.windowObjectContentRaw.canGoForward();
-  }
+    windowx.reloadContent = function() {
+        windowx.windowObjectContentRaw.reload();
+        return windowx;
+    }
 
-  this.getContentWindow = function() {
-    return this.windowObjectContentRaw.contentWindow;
-  }
+    windowx.findInContent = function(a,b,c) {
+        windowx.windowObjectContentRaw.find(a,b,c);
+        return windowx;
+    }
 
-  this.getContextMenus = function() {
-    return this.windowObjectContentRaw.contextMenus;
-  }
+    windowx.clearUserData = function(a,b,c) {
+        windowx.windowObjectContentRaw.clearData(a,b,c);
+        return windowx;
+    }
 
-  this.getRequestEventInterface = function() {
-    return this.windowObjectContentRaw.request;
-  }
+    windowx.executeScript = function(a,b) {
+        windowx.windowObjectContentRaw.executeScript(a,b);
+        return windowx;
+    }
 
-  return this;
+    windowx.addContentScripts = function(a) {
+        windowx.windowObjectContentRaw.addContentScripts(a);
+        return windowx;
+    }
+
+    windowx.canGoBack = function() {
+        return windowx.windowObjectContentRaw.canGoBack();
+    }
+
+    windowx.canGoForward = function() {
+        return windowx.windowObjectContentRaw.canGoForward();
+    }
+
+    windowx.getContentWindow = function() {
+        return windowx.windowObjectContentRaw.contentWindow;
+    }
+
+    windowx.getContextMenus = function() {
+        return windowx.windowObjectContentRaw.contextMenus;
+    }
+
+    windowx.getRequestEventInterface = function() {
+        return windowx.windowObjectContentRaw.request;
+    }
+
+    windowx.open = function() {
+        body.append(windowx);
+        return windowx;
+    }
+
+    return windowx;
 
 
 }

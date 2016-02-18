@@ -5,5 +5,5 @@ const make = function(type) {
 }
 
 const head = $(document.head);
-const body = $(document.body);
+const body = $("body");
 const html = $("html");

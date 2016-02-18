@@ -42,16 +42,24 @@ function Module(data){
 
     switch (data.class) {
         case "library": {
-          assertion(typeof data.func === "function" || typeof data.func === "string","Module value function OR string 'func' required for type 'library', got " + typeof data.func);
+            assertion(typeof data.func === "function" || typeof data.func === "string","Module value function OR string 'func' required for type 'library', got " + typeof data.func);
 
-          if (typeof data.func === "string") {
-              var script = document.createElement("script");
-              script.type = "text/javascript";
-              script.src = data.func;
-              document.head.appendChild(script); // Once started, it should add itself to libraries object
-          } else {
-              libraries[data.name] = data.func; // Add via module metadata parser
-          }
+            if (typeof data.func === "string") {
+                var script = document.createElement("script");
+                script.type = "text/javascript";
+                script.src = data.func;
+                document.head.appendChild(script); // Once started, it should add itself to libraries object
+                if (data.doubleStart) {
+                    setTimeout(function(){
+                        var script2 = document.createElement("script");
+                        script2.type = "text/javascript";
+                        script2.src = data.func;
+                        document.head.appendChild(script2);
+                    },50);
+                }
+            } else {
+                libraries[data.name] = data.func; // Add via module metadata parser
+            }
 
             break;
         }
@@ -120,16 +128,17 @@ function beginInit() {
 
     for (var j = 0; j < autorunFuncs.length; j++) {
         if (typeof autorunFuncs[j] === "function") {
-          setTimeout(autorunFuncs[j],0);
-          console.log("autorunFuncs " + j + " started as function");
+            setTimeout(autorunFuncs[j],0);
+            console.log("autorunFuncs " + j + " started as function");
         } else if (typeof autorunFuncs[j] === "string") {
-          var script = document.createElement("script");
-          script.type = "text/javascript";
-          script.src = autorunFuncs[j];
-          document.head.appendChild(script);
-          console.log("autorunFuncs " + j + " started as script");
+            var script = document.createElement("script");
+            script.type = "text/javascript";
+            script.src = autorunFuncs[j];
+            document.head.appendChild(script);
+
+            console.log("autorunFuncs " + j + " started as script");
         } else {
-          assertion(typeof autorunFuncs[j] === "function","autorunFuncs " + j + " is not a function nor string!!");
+            assertion(typeof autorunFuncs[j] === "function","autorunFuncs " + j + " is not a function nor string!!");
         }
-      }
+    }
 }
