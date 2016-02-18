@@ -1,3 +1,15 @@
+/*
+window.js
+
+OpenShell Package which defines the Window object for the creation of windows on screen
+
+(c) 2016 The OpenShell Foundation
+(c) 2016 Ryan Dolan (dangeredwolf)
+
+Released under the GNU Public License (GPL) Version 2
+
+*/
+
 "use strict";
 
 function Window(data) {
@@ -7,6 +19,8 @@ function Window(data) {
   this.sizeY = data.sizeY || 400;
   this.posX = data.posX || ($("html").width() / 2) - (this.sizeX / 2);
   this.posY = data.posY || ($("html").height() / 2) - (this.sizeY / 2);
+
+  this.windowID = Math.floor(Math.random() * 1234567890)
 
   this.opened = data.opened || true;
   this.title = data.title || "Window";
@@ -26,10 +40,10 @@ function Window(data) {
 
   this.windowObjectControlContainer = make("div")
   .addClass("windowControlContainer")
-  .append(windowObjectControlClose)
-  .append(windowObjectControlMaximize)
-  .append(windowObjectControlMinimize)
-  .append(windowObjectTitle);
+  .append(this.windowObjectControlClose)
+  .append(this.windowObjectControlMaximize)
+  .append(this.windowObjectControlMinimize)
+  .append(this.windowObjectTitle);
 
   this.windowObjectContent = make("webview")
   .addClass("windowContent");
@@ -38,8 +52,8 @@ function Window(data) {
 
   this.windowObjectContainer = make("div")
   .addClass("windowContainer")
-  .append(windowObjectControlContainer)
-  .append(windowObjectContent);
+  .append(this.windowObjectControlContainer)
+  .append(this.windowObjectContent);
 
   this.setSizeX = function(num) {
     assertion(typeof num !== "number","setSizeX expects number, got " + typeof num);
@@ -70,7 +84,7 @@ function Window(data) {
       this.windowObjectContainer.addClass("windowContainerClosed");
 
       setTimeout(function(){
-          this.windowObjetContainer.remove();
+          this.windowObjectContainer.remove();
       },3000)
   }
 
@@ -158,6 +172,8 @@ function Window(data) {
   this.getRequestEventInterface = function() {
     return this.windowObjectContentRaw.request;
   }
+
+  return this;
 
 
 }
