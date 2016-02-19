@@ -9,6 +9,6 @@ chrome.app.runtime.onLaunched.addListener(function() {
 		visibleOnAllWorkspaces:workspacesSupported
 	},function(osui){
 		osui.show();
-		osui.fullscreen();
+		//osui.fullscreen();
 	});
 });

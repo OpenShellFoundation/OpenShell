@@ -1,0 +1,12 @@
+Last Updated 19 Feb 2016
+
+window.js
+
+data: {
+  string url (required)
+  
+}
+
+class Window (object data) {
+
+}
