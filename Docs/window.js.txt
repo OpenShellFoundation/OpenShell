@@ -35,13 +35,22 @@ method stopFinding() // stops searching page contents, if searching
 
 method goBack() // go back one level in history
 method goForward() // go forward one level in history
+method goToRelativeHistoryPoint(number point[, function callback]) // go to relative spot in webpage history
 
 method insertCSS(object data) // see https://developer.chrome.com/apps/tags/webview#method-insertCSS
 
 method setZoom(number level) // sets zoom level of the web view
 method setZoomMode(ZoomMode zoomMode) // sets zoom mode of the web view, https://developer.chrome.com/apps/tags/webview#type-ZoomMode
 
+number getZoom() // returns zoom level of web view
+ZoomMode getZoomMode() // returns zoom mode of web view https://developer.chrome.com/apps/tags/webview#type-ZoomMode
 
+method printContentPage() // triggers print dialogue for content page
+
+https://developer.chrome.com/apps/tags/webview#type-ContentScriptDetails
+
+method addContentScripts(object content[, function callback]) // adds content scripts
+method removeContentScripts([object content, function callback]) // removes content scripts
 
 
 
