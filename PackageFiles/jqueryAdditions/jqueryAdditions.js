@@ -1,3 +1,3 @@
-const head = $(document.head);
+const head = $("head");
 const body = $("body");
 const html = $("html");

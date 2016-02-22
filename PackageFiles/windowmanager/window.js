@@ -17,7 +17,7 @@ function Window(data) {
     var windowx = make("div").addClass("windowContainer");
 
     assertion(typeof data === "object","Argument 1, data, expects object, but got " + typeof data);
-    assertion(typeof data.url === "string","Property 'url' of object Window expects string, but got " + typeof data.url);
+
     windowx.sizeX = data.sizeX || 700;
     windowx.sizeY = data.sizeY || 400;
     windowx.posX = data.posX || ($("html").width() / 2) - (windowx.sizeX / 2);
@@ -49,7 +49,8 @@ function Window(data) {
     .append(windowx.windowObjectTitle);
 
     windowx.windowObjectContent = make("webview")
-    .addClass("windowContent");
+    .addClass("windowContent")
+    .attr("url",data.url);
 
     windowx.windowObjectContentRaw = windowx.windowObjectContent[0];
 
@@ -81,9 +82,15 @@ function Window(data) {
         return windowx;
     }
 
-    windowx.setTitle = function(name) {
-        assertion(typeof name === "undefined","setTitle expects string or object, got undefined");
-        windowx.windowTitle.html(name);
+    windowx.setTitle = function(title) {
+        assertion(typeof title === "undefined","setTitle expects string or object, got undefined");
+        windowx.windowTitle.html(title);
+        return windowx;
+    }
+
+    windowx.setURL = function(url) {
+        assertion(typeof url !== "string","setURL expects string, got undefined");
+        windowx.windowObjectContent.attr("url",url);
         return windowx;
     }
 
@@ -101,6 +108,15 @@ function Window(data) {
         windowx.addClass("minimized");
         return windowx;
     }
+
+    windowx.minimise = windowx.minimize;
+
+    windowx.maximize = function() {
+        windowx.addClass("maximized");
+        return windowx;
+    }
+
+    windowx.maximise = windowx.maximize;
 
     windowx.terminateProcess = function() {
         windowx.close();
@@ -212,6 +228,11 @@ function Window(data) {
 
     windowx.open = function() {
         body.append(windowx);
+        return windowx;
+    }
+
+    windowx.setPartition = function(a) {
+        windowx.attr("partition","persist:" + a);
         return windowx;
     }
 

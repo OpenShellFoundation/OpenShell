@@ -1,12 +1,49 @@
-Last Updated 19 Feb 2016
+Last Updated 22 Feb 2016
 
 window.js
 
 data: {
-  string url (required)
-  
+  string url // initial URL
+  string title // initial title
+
+  number sizeX // initial horizontal size
+  number sizeY // initial vertical size
+  number posX // initial horizontal position
+  number posY // initial vertical position
 }
 
 class Window (object data) {
+
+method setSizeX(number size) // sets horizontal size after creation
+method setSizeY(number size) // sets vertical size after creation
+method setPosX(number size) // sets horizontal position after creation
+method setPosY(number size) // sets vertical position after creation
+
+method setURL(string url) // sets URL after creation
+method setTitle(string title) // sets title after creation
+
+method close() // close window
+method minimize() // close window
+method maximize() // maximize window
+
+method minimise() // see minimize
+method maximise() // see maximize
+
+method terminateProcess() // terminates the renderer process of the window. Caution: Can affect other windows from the same domain name
+method stopLoading() // stops loading the page, if loading
+method stopFinding() // stops searching page contents, if searching
+
+method goBack() // go back one level in history
+method goForward() // go forward one level in history
+
+method insertCSS(object data) // see https://developer.chrome.com/apps/tags/webview#method-insertCSS
+
+method setZoom(number level) // sets zoom level of the web view
+method setZoomMode(ZoomMode zoomMode) // sets zoom mode of the web view, https://developer.chrome.com/apps/tags/webview#type-ZoomMode
+
+
+
+
+
 
 }
