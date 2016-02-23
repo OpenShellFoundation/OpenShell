@@ -12,7 +12,7 @@ data: {
   number posY // initial vertical position
 }
 
-class Window (object data) {
+class Window ([object data]) {
 
 method setSizeX(number size) // sets horizontal size after creation
 method setSizeY(number size) // sets vertical size after creation
@@ -26,8 +26,8 @@ method close() // close window
 method minimize() // close window
 method maximize() // maximize window
 
-method minimise() // see minimize
-method maximise() // see maximize
+method minimise() // linked to minimize
+method maximise() // linked to maximize
 
 method terminateProcess() // terminates the renderer process of the window. Caution: Can affect other windows from the same domain name
 method stopLoading() // stops loading the page, if loading

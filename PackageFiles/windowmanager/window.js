@@ -16,7 +16,7 @@ function Window(data) {
 
     var windowx = make("div").addClass("windowContainer");
 
-    assertion(typeof data === "object","Argument 1, data, expects object, but got " + typeof data);
+    var data = data || {};
 
     windowx.sizeX = data.sizeX || 700;
     windowx.sizeY = data.sizeY || 400;

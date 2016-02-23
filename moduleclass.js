@@ -12,13 +12,13 @@ Released under the GNU Public License (GPL) Version 2
 
 "use strict";
 
-var loadedModules = [];
-var loadedModuleNames = [];
+var loadedPackages = [];
+var loadedPackageNames = [];
 var library = {};
 var ignoreDependencyErrors = false;
 var ignoreInvalidMetadata = false;
-var loadedModuleMetadata = {};
-var autorunFuncs = [];
+var loadedPackageMetadata = {};
+var autorunScripts = [];
 
 function assertion(statement,message) {
     if (!statement) {
@@ -26,47 +26,73 @@ function assertion(statement,message) {
     }
 }
 
-function Module(data){
+function Package(data){
     if (!ignoreInvalidMetadata) {
-        assertion(typeof data === "object","Module needs argument of type object, got " + typeof data);
-        assertion(typeof data.humanname === "string","Required module value 'humanname' should be string, got " + typeof data.humanname);
-        assertion(typeof data.name === "string","Required module value 'name' should be string, got " + typeof data.name);
-        assertion(typeof data.id === "string","Required module value 'id' should be string, got " + typeof data.id);
-        assertion(typeof data.class === "string","Required module value 'class' should be string, got " + typeof data.class);
-        assertion(typeof data.author === "string","Required module value 'author' should be string, got " + typeof data.author);
-        assertion(typeof data.version === "string","Required module value 'version' should be string, got " + typeof data.version);
-        assertion(typeof data.versionMajor === "number","Required module value 'versionMajor' should be number, got " + typeof data.versionMajor + ". If you aren't using this value, set it to 0");
-        assertion(typeof data.versionMinor === "number","Required module value 'versionMinor' should be number, got " + typeof data.versionMinor + ". If you aren't using this value, set it to 0");
-        assertion(typeof data.versionPatch === "number","Required module value 'versionPatch' should be number, got " + typeof data.versionPatch + ". If you aren't using this value, set it to 0");
+        assertion(typeof data === "object","Package needs argument of type object, got " + typeof data);
+        assertion(typeof data.humanname === "string","Required package value 'humanname' should be string, got " + typeof data.humanname);
+        assertion(typeof data.name === "string","Required package value 'name' should be string, got " + typeof data.name);
+        assertion(typeof data.id === "string","Required package value 'id' should be string, got " + typeof data.id);
+        assertion(typeof data.class === "string","Required package value 'class' should be string, got " + typeof data.class);
+        assertion(typeof data.author === "string","Required package value 'author' should be string, got " + typeof data.author);
+        assertion(typeof data.version === "string","Required package value 'version' should be string, got " + typeof data.version);
+        assertion(typeof data.versionMajor === "number","Required package value 'versionMajor' should be number, got " + typeof data.versionMajor + ". If you aren't using this value, set it to 0");
+        assertion(typeof data.versionMinor === "number","Required package value 'versionMinor' should be number, got " + typeof data.versionMinor + ". If you aren't using this value, set it to 0");
+        assertion(typeof data.versionPatch === "number","Required package value 'versionPatch' should be number, got " + typeof data.versionPatch + ". If you aren't using this value, set it to 0");
     }
 
     switch (data.class) {
         case "library": {
-            assertion(typeof data.func === "function" || typeof data.func === "string","Module value function OR string 'func' required for type 'library', got " + typeof data.func);
+            assertion(typeof data.scripts === "function" || typeof data.scripts === "object" || typeof data.scripts === "string","Package value function OR string 'func' required for type 'library', got " + typeof data.scripts);
 
-            if (typeof data.func === "string") {
+            if (typeof data.scripts === "string") {
                 var script = document.createElement("script");
                 script.type = "text/javascript";
-                script.src = data.func;
+                script.src = data.scripts;
                 document.head.appendChild(script); // Once started, it should add itself to libraries object
                 if (data.doubleStart) {
                     setTimeout(function(){
                         var script2 = document.createElement("script");
                         script2.type = "text/javascript";
-                        script2.src = data.func;
+                        script2.src = data.scripts;
                         document.head.appendChild(script2);
                     },50);
                 }
+                console.log("Loaded library " + data.name + " (" + data.humanname + ") script");
+            } else if (typeof data.scripts === "function") {
+                libraries[data.name] = data.scripts; // Add via package metadata parser
+                console.log("Loaded library " + data.name + " (" + data.humanname + ") script");
             } else {
-                libraries[data.name] = data.func; // Add via module metadata parser
+                for (var k = 0; k < data.scripts.length; k++) {
+                    var script = document.createElement("script");
+                    script.type = "text/javascript";
+                    script.src = data.scripts[k];
+                    document.head.appendChild(script);
+                    console.log("Loaded library " + data.name + " (" + data.humanname + ") script #" + (k + 1));
+                }
+            }
+
+            if (typeof data.styles === "string") {
+                var style = document.createElement("link");
+                style.rel = "stylesheet";
+                style.href = data.styles;
+                document.head.appendChild(style);
+                console.log("Loaded library " + data.name + " (" + data.humanname + ") style");
+            } else if (typeof data.styles === "object") {
+                for (var k = 0; k < data.styles.length; k++) {
+                    var style = document.createElement("link");
+                    style.rel = "stylesheet";
+                    style.href = data.styles[k];
+                    document.head.appendChild(style);
+                    console.log("Loaded library " + data.name + " (" + data.humanname + ") style #" + (k + 1));
+                }
             }
 
             break;
         }
         case "autorun": {
-            assertion(typeof data.func === "function" || typeof data.func === "string","Module value function OR string 'func' required for type 'autorun', got " + typeof data.func);
+            assertion(typeof data.scripts === "function" || typeof data.scripts === "object" || typeof data.scripts === "string","Package value function, object OR string 'func' required for type 'autorun', got " + typeof data.scripts);
 
-            autorunFuncs[autorunFuncs.length] = data.func;
+            autorunScripts[autorunScripts.length] = data.scripts;
             break;
         }
         case "app": {
@@ -76,12 +102,12 @@ function Module(data){
 
     }
 
-    console.log("Loaded module " + data.name + " (" + data.id + ")");
+    console.log("Loaded package " + data.name + " (" + data.id + ")");
 
-    loadedModules[loadedModules.length] = data.id;
-    loadedModules[loadedModules.length] = data.name;
-    loadedModuleNames[loadedModuleNames.length] = data.name;
-    loadedModuleMetadata[loadedModuleMetadata.length] = data;
+    loadedPackages[loadedPackages.length] = data.id;
+    loadedPackages[loadedPackages.length] = data.name;
+    loadedPackageNames[loadedPackageNames.length] = data.name;
+    loadedPackageMetadata[loadedPackageMetadata.length] = data;
 
 }
 
@@ -94,26 +120,26 @@ function verifyDependencies() {
 
     console.log("Performing dependency check...");
 
-    for (var a = 0; a < loadedModuleMetadata.length; a++) {
+    for (var a = 0; a < loadedPackageMetadata.length; a++) {
         var hasUnmetDependencies = false;
 
-        if (typeof loadedModuleMetadata[a] === "object" && typeof loadedModuleMetadata[a].depends === "object") {
-            for (var i = 0; i < loadedModuleMetadata[a].depends.length; i++) {
+        if (typeof loadedPackageMetadata[a] === "object" && typeof loadedPackageMetadata[a].depends === "object") {
+            for (var i = 0; i < loadedPackageMetadata[a].depends.length; i++) {
                 var available = false;
-                for (var j = 0; j < loadedModules.length; j++) {
-                    if (loadedModules[j] === loadedModuleMetadata[a].depends[i]) {
+                for (var j = 0; j < loadedPackages.length; j++) {
+                    if (loadedPackages[j] === loadedPackageMetadata[a].depends[i]) {
                         available = true;
-                        console.error("Required Dependency " + loadedModules[j] + " is OK");
+                        console.error("Required Dependency " + loadedPackages[j] + " is OK");
                         break;
                     }
                 }
                 if (!available) {
-                    console.error("Unmet dependency!!!: " + loadedModuleMetadata[a].depends[i]);
+                    console.error("Unmet dependency!!!: " + loadedPackageMetadata[a].depends[i]);
                 }
             }
 
             if (hasUnmetDependencies) {
-                throw "Package " + loadedModuleMetadata[a].name || "missingno" + " has unmet dependencies. Make sure libraries are initialised first.  If you're still having trouble, enable ignoreDependencyErrors";
+                throw "Package " + loadedPackageMetadata[a].name || "missingno" + " has unmet dependencies. Make sure libraries are initialised first.  If you're still having trouble, enable ignoreDependencyErrors";
             }
         }
     }
@@ -122,23 +148,32 @@ function verifyDependencies() {
 function beginInit() {
     verifyDependencies();
 
-    console.log("Starting autorunFuncs");
+    console.log("Starting autorunScripts");
 
-    assertion(autorunFuncs.length > -1,"CRITICAL ISSUE: There is no initialization candidate declared by the packages.js file. OpenShell cannot continue to launch!!");
+    assertion(autorunScripts.length > -1,"CRITICAL ISSUE: There is no initialization candidate declared by the packages.js file. OpenShell cannot continue to launch!!");
 
-    for (var j = 0; j < autorunFuncs.length; j++) {
-        if (typeof autorunFuncs[j] === "function") {
-            setTimeout(autorunFuncs[j],0);
-            console.log("autorunFuncs " + j + " started as function");
-        } else if (typeof autorunFuncs[j] === "string") {
+    for (var j = 0; j < autorunScripts.length; j++) {
+        if (typeof autorunScripts[j] === "function") {
+            setTimeout(autorunScripts[j],0);
+            console.log("autorunScripts " + j + " started as function");
+        } else if (typeof autorunScripts[j] === "string") {
             var script = document.createElement("script");
             script.type = "text/javascript";
-            script.src = autorunFuncs[j];
+            script.src = autorunScripts[j];
             document.head.appendChild(script);
 
-            console.log("autorunFuncs " + j + " started as script");
+            console.log("autorunScripts " + j + " started as script");
+        } else if (typeof autorunScripts[j] === "object") {
+            for (var k = 0; k < autorunScripts[j].length; k++) {
+                var script = document.createElement("script");
+                script.type = "text/javascript";
+                script.src = autorunScripts[j][k];
+                document.head.appendChild(script);
+
+                console.log("autorunScripts " + j + "." + k + " started as script");
+            }
         } else {
-            assertion(typeof autorunFuncs[j] === "function","autorunFuncs " + j + " is not a function nor string!!");
+            assertion(typeof autorunScripts[j] === "function","autorunScripts " + j + " is not a function nor string!!");
         }
     }
 }
