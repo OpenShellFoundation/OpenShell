@@ -56,7 +56,38 @@ var windowClass = new Module({
   versionPatch:0,
   version:"1.0",
   depends:["jquery"],
+  doubleStart:true,
   func:"PackageFiles/jqueryAdditions/jqueryAdditions2.js",
+  class:"library"
+});
+
+var windowClass = new Module({
+  humanname:"jQuery Extensions",
+  name:"jqueryx",
+  id:"com.dangeredwolf.openshell.jqueryx.funcs",
+  author:"The OpenShell Foundation",
+  versionMajor:1,
+  versionMinor:0,
+  versionPatch:0,
+  version:"1.0",
+  depends:["jquery"],
+  doubleStart:true,
+  func:"PackageFiles/jqueryAdditions/jqueryAdditions3.js",
+  class:"library"
+});
+
+var windowClass = new Module({
+  humanname:"jQuery Extensions",
+  name:"jqueryx",
+  id:"com.dangeredwolf.openshell.jqueryx.funcs",
+  author:"The OpenShell Foundation",
+  versionMajor:1,
+  versionMinor:0,
+  versionPatch:0,
+  version:"1.0",
+  depends:["jquery"],
+  doubleStart:true,
+  func:"PackageFiles/jqueryAdditions/jqueryAdditions4.js",
   class:"library"
 });
 

@@ -36,6 +36,7 @@ method stopFinding() // stops searching page contents, if searching
 method goBack() // go back one level in history
 method goForward() // go forward one level in history
 method goToRelativeHistoryPoint(number point[, function callback]) // go to relative spot in webpage history
+method reloadContent() // reloads the webpage content
 
 method insertCSS(object data) // see https://developer.chrome.com/apps/tags/webview#method-insertCSS
 
