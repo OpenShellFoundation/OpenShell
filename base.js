@@ -1,11 +1,11 @@
 "use strict";
 
 var packageClass = document.createElement("script");
-packageClass.src = "moduleclass.js";
+packageClass.src = "PackageFiles/Package/package.js";
 document.head.appendChild(packageClass);
 
 setTimeout(function(){
-  var packageJS = document.createElement("script");
-  packageJS.src = "packages.js";
-  document.head.appendChild(packageJS);
+  var packageData = document.createElement("script");
+  packageData.src = "packages.js";
+  document.head.appendChild(packageData);
 },0);
