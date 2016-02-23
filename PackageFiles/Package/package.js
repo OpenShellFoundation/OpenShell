@@ -14,10 +14,9 @@ Released under the GNU Public License (GPL) Version 2
 
 var loadedPackages = [];
 var loadedPackageNames = [];
-var library = {};
 var ignoreDependencyErrors = false;
 var ignoreInvalidMetadata = false;
-var loadedPackageMetadata = {};
+var loadedPackageMetadata = [];
 var autorunScripts = [];
 
 function assertion(statement,message) {
@@ -104,10 +103,10 @@ function Package(data){
 
     console.log("Loaded package " + data.name + " (" + data.id + ")");
 
-    loadedPackages[loadedPackages.length] = data.id;
-    loadedPackages[loadedPackages.length] = data.name;
-    loadedPackageNames[loadedPackageNames.length] = data.name;
-    loadedPackageMetadata[loadedPackageMetadata.length] = data;
+    loadedPackages.push(data.id);
+    loadedPackages.push(data.name);
+    loadedPackageNames.push(data.name);
+    loadedPackageMetadata.push(data);
 
 }
 
@@ -129,18 +128,35 @@ function verifyDependencies() {
                 for (var j = 0; j < loadedPackages.length; j++) {
                     if (loadedPackages[j] === loadedPackageMetadata[a].depends[i]) {
                         available = true;
-                        console.error("Required Dependency " + loadedPackages[j] + " is OK");
+                        console.log("Required Dependency " + loadedPackages[j] + " is OK");
                         break;
                     }
                 }
                 if (!available) {
-                    console.error("Unmet dependency!!!: " + loadedPackageMetadata[a].depends[i]);
+                    console.warn("Unmet dependency!!!: " + loadedPackageMetadata[a].depends[i]);
+                    hasUnmetDependencies = true;
                 }
             }
 
             if (hasUnmetDependencies) {
-                throw "Package " + loadedPackageMetadata[a].name || "missingno" + " has unmet dependencies. Make sure libraries are initialised first.  If you're still having trouble, enable ignoreDependencyErrors";
+                throw "Package " + (loadedPackageMetadata[a].name || "missingno") + " has unmet dependencies. Make sure libraries are initialized first.  If you're still having trouble, enable ignoreDependencyErrors";
             }
+        } else if (loadedPackageMetadata[a] === "object" && typeof loadedPackageMetadata[a].depends === "string") {
+
+          var available = false;
+
+          for (var j = 0; j < loadedPackages.length; j++) {
+              if (loadedPackages[j] === loadedPackageMetadata[a].depends) {
+                  available = true;
+                  console.log("Required Dependency " + loadedPackageMetadata[a].depends + " is OK");
+                  break;
+              }
+          }
+
+          if (!available) {
+            console.warn("Unmet dependency!!!: " + loadedPackageMetadata[a].depends[i]);
+          }
+
         }
     }
 }
@@ -150,7 +166,7 @@ function beginInit() {
 
     console.log("Starting autorunScripts");
 
-    assertion(autorunScripts.length > -1,"CRITICAL ISSUE: There is no initialization candidate declared by the packages.js file. OpenShell cannot continue to launch!!");
+    assertion(autorunScripts.length > -1,"CRITICAL ISSUE: There is no initialization candidate declared by the packages.js file. OpenShell cannot continue to launch properly!!");
 
     for (var j = 0; j < autorunScripts.length; j++) {
         if (typeof autorunScripts[j] === "function") {

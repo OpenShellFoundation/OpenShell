@@ -25,6 +25,8 @@ new Package({
     id:"org.jquery",
     author:"jQuery Foundation",
 
+    critical:true,
+
     versionMajor:2,
     versionMinor:1,
     versionPatch:4,
@@ -47,18 +49,11 @@ new Package({
     versionPatch:0,
     version:"1.0",
 
-    depends:[
-        "jquery"
-    ],
+    depends:"jquery",
 
-    scripts:[
-        "PackageFiles/jqueryAdditions/jqueryAdditions.js",
-        "PackageFiles/jqueryAdditions/jqueryAdditions2.js",
-        "PackageFiles/jqueryAdditions/jqueryAdditions3.js",
-        "PackageFiles/jqueryAdditions/jqueryAdditions4.js"
-    ],
+    scripts:"PackageFiles/jqueryAdditions/jqueryAdditions.js",
 
-    class:"library"
+    class:"autorun"
 });
 
 new Package({
@@ -73,9 +68,7 @@ new Package({
     versionPatch:4,
     version:"1.11.4",
 
-    depends:[
-        "jquery"
-    ],
+    depends:"jquery",
 
     scripts:"Libraries/jQuery/jquery-ui.min.js",
 
@@ -101,6 +94,8 @@ new Package({
 
     scripts:"PackageFiles/windowmanager/window.js",
 
+    styles:"PackageFiles/windowmanager/window.css",
+
     depends:[
         "jquery",
         "jqueryx",
@@ -120,6 +115,11 @@ new Package({
     versionMinor:0,
     versionPatch:0,
     version:"1.0",
+
+    depends:[
+        "jquery",
+        "jqueryx"
+    ],
 
     scripts:"PackageFiles/init/osinit.js",
 

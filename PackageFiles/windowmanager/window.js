@@ -237,12 +237,5 @@ function Window(data) {
     }
 
     return windowx;
-
-
+    
 }
-
-var styles = make("link").attr("rel","stylesheet").attr("href","PackageFiles/windowmanager/window.css");
-
-setTimeout(function(){
-  $("head").append(styles);
-},0);
