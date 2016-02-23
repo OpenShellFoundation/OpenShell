@@ -18,10 +18,10 @@ console.log("Starting OpenShell BootStrap 1.0\n\
 \n\
 Released under the GNU Public License (GPL) Version 2");
 
-var jQueryPackage = new Package({
+new Package({
 
-    humanname:"jQuery",
     name:"jquery",
+    humanname:"jQuery",
     id:"org.jquery",
     author:"jQuery Foundation",
 
@@ -35,7 +35,7 @@ var jQueryPackage = new Package({
     class:"library"
 });
 
-var windowClass = new Package({
+new Package({
 
     name:"jqueryx",
     humanname:"jQuery Extensions",
@@ -48,7 +48,7 @@ var windowClass = new Package({
     version:"1.0",
 
     depends:[
-    "jquery"
+        "jquery"
     ],
 
     scripts:[
@@ -61,8 +61,9 @@ var windowClass = new Package({
     class:"library"
 });
 
-var jQueryUIPackage = new Package({
+new Package({
 
+    name:"jqueryui",
     humanname:"jQuery UI",
     id:"org.jquery.ui",
     author:"jQuery Foundation",
@@ -86,9 +87,10 @@ var jQueryUIPackage = new Package({
     class:"library"
 });
 
-var windowClass = new Package({
-    humanname:"Window Objects",
+new Package({
+
     name:"window",
+    humanname:"Window Objects",
     id:"com.dangeredwolf.openshell.window",
     author:"The OpenShell Foundation",
 
@@ -108,7 +110,7 @@ var windowClass = new Package({
     class:"library"
 });
 
-var initScript = new Package({
+new Package({
     name:"init",
     humanname:"OpenShell Init Script",
     id:"com.dangeredwolf.openshell.init",
