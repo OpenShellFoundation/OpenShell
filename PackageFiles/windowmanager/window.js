@@ -162,6 +162,11 @@ function Window(data) {
         return this;
     }
 
+    windowx.setSize = function (num1,num2) {
+        this.setSizeX(num1);
+        this.setSizeY(num2);
+    }
+
     windowx.setPosX = function(num) {
         assertion(typeof num === "number","setPosX expects number, got " + typeof num);
         this.posX = num;
@@ -174,6 +179,11 @@ function Window(data) {
         this.posY = num;
         this.updateSizeInternal(); // Position updated, update window to reflect that
         return this;
+    }
+
+     windowx.setPos = function (num1,num2) {
+        this.setPosX(num1);
+        this.setPosY(num2);
     }
 
     windowx.setSpecial = function(str) {
@@ -196,7 +206,7 @@ function Window(data) {
         assertion(typeof url === "string","setURL expects string, got " + typeof url);
         if (useWebViews) {
             this.windowObjectContent.attr("url",url);
-            this.reloadContent();
+            this.reload();
         }
         else {
             this.windowObjectContent.attr("src",url);
@@ -295,7 +305,7 @@ function Window(data) {
         return this;
     }
 
-    windowx.reloadContent = function() {
+    windowx.reload = function() {
         if (useWebViews)
             this.windowObjectContentRaw.reload();
         else
@@ -303,7 +313,7 @@ function Window(data) {
         return this;
     }
 
-    windowx.findInContent = function(a,b,c) {
+    windowx.find = function(a,b,c) {
         if (useWebViews)
             this.windowObjectContentRaw.find(a,b,c);
         return this;

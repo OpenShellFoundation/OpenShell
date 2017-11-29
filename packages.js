@@ -113,12 +113,31 @@ new Package({
 
     scripts:"PackageFiles/windowmanager/window.js",
 
-    styles:"PackageFiles/windowmanager/window.css",
-
     depends:[
         "jquery",
         "jqueryx",
         "init"
+    ],
+
+    class:"library"
+});
+
+new Package({
+
+    name:"windowtheme",
+    humanname:"Window Objects",
+    id:"com.dangeredwolf.openshell.window-theme",
+    author:"The OpenShell Foundation",
+
+    versionMajor:1,
+    versionMinor:0,
+    versionPatch:0,
+    version:"1.0",
+
+    styles:"PackageFiles/org.openshell.theme.default/Style/window.css",
+
+    depends:[
+        "window"
     ],
 
     class:"library"
