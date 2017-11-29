@@ -1,39 +1,107 @@
 .windowContainer {
     background:#333;
-    position:absolute;
+    position:absolute!important;
     padding:4px;
+    z-index:3;
+    border:2px solid #333;
+    border-top:none;
+    box-shadow:0 2px 4px #000;
+    border-radius:3px;
+    transition:opacity 0.15s
+}
+
+.windowContainer:not(.focused) {
+    opacity:0.9;
+    z-index:2
 }
 
 .windowControlContainer {
-    padding:6px
+    overflow:hidden
 }
 
 .windowControl {
-    width:12px;
-    height:12px;
-    display:inline;
+    width:36px;
+    height:36px;
+    display:block;
+    right:0;
+    top:0;
+    background:0;
+    border:2px solid transparent;
+    color:#fff;
+    font-family:"Material Icons";
+    position:absolute;
+    transition:border .3s,background .3s
+}
+
+.windowControlMaximize {
+    right:36px
+}
+
+.windowControlMinimize {
+    right:72px
+}
+
+.windowControl:focus {
+    outline:0
+}
+
+.windowControl:active,.windowControl:hover {
+    border:2px solid #666
+}
+
+.windowControl:hover {
+    background:#444
+}
+
+.windowControl:active {
+    background:0
 }
 
 .windowTitle {
     color:#fff;
     font-size:16px;
-    padding-bottom:3px;
+    padding-top:3px;
+    padding-left:4px;
+    pointer-events:none;
+    text-align:center;
 }
 
 @keyframes openWindowAnimation {
     from {
         transform:scale(0.5);
+        opacity:0
     }
 
     to {
         transform:scale(1);
+        opacity:1
+
+    }
+}
+
+@keyframes closeWindowAnimation {
+    from {
+        transform:scale(1);
+        opacity:1
+    }
+
+    to {
+        transform:scale(0.5);
+        opacity:0
 
     }
 }
 
 .windowContainer {
     animation:openWindowAnimation 0.3s;
-    transition:width 0.3s, height 0.3s, top 0.3s, left 0.3s;
+    opacity:1
+}
+
+.windowContainer.windowContainerClosed {
+    animation:closeWindowAnimation 0.3s;
+    transform:scale(0.5);
+    pointer-events:none;
+    opacity:0
 }
 
 .windowContainer.maximized {
@@ -41,4 +109,40 @@
     height:100%;
     top:0;
     left:0
+}
+
+.windowContent {
+    position:relative;
+    display:block;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+    width:auto;
+    height:auto;
+    overflow:hidden
+}
+
+.windowWebViewWrapper {
+    position:absolute;
+    display:block;
+    top:36px;
+    left:0;
+    right:0;
+    bottom:0;
+    width:auto;
+    height:auto
+}
+
+.wallpaper {
+    z-index:0!important;
+    background:transparent!important;
+    opacity:1!important;
+    border:0!important;
+    box-shadow:none!important;
+    animation:0!important;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%
 }

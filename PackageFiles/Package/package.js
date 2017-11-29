@@ -3,8 +3,8 @@ OpenShell Modular Class System
 
 Provides an abstract way to modularise OpenShell
 
-(c) 2016 The OpenShell Foundation
-(c) 2016 Ryan Dolan (dangeredwolf)
+(c) 2017 The OpenShell Foundation
+(c) 2017 Ryan Dolan (dangeredwolf)
 
 Released under the GNU Public License (GPL) Version 2
 
@@ -41,7 +41,7 @@ function Package(data){
 
     switch (data.class) {
         case "library": {
-            assertion(typeof data.scripts === "function" || typeof data.scripts === "object" || typeof data.scripts === "string","Package value function OR string 'func' required for type 'library', got " + typeof data.scripts);
+            assertion(typeof data.scripts === "function" || typeof data.scripts === "object" || typeof data.scripts === "string" || typeof data.styles === "string" || typeof data.styles === "object","Package value 'scripts' requires function OR string for type 'library', and/or 'styles' requires string, got " + typeof data.scripts);
 
             if (typeof data.scripts === "string") {
                 var script = document.createElement("script");
@@ -60,6 +60,7 @@ function Package(data){
             } else if (typeof data.scripts === "function") {
                 libraries[data.name] = data.scripts; // Add via package metadata parser
                 console.log("Loaded library " + data.name + " (" + data.humanname + ") script");
+            } else if ((typeof data.styles === "string" || typeof data.styles === "object") && typeof data.scripts === "undefined") {
             } else {
                 for (var k = 0; k < data.scripts.length; k++) {
                     var script = document.createElement("script");

@@ -39,21 +39,21 @@ new Package({
 
 new Package({
 
-    name:"jqueryx",
-    humanname:"jQuery Extensions",
-    id:"com.dangeredwolf.openshell.jqueryx.consts",
-    author:"The OpenShell Foundation",
+    name:"com.google.fonts",
+    humanname:"Roboto and Material Icon Fonts",
+    id:"com.google.fonts",
+    author:"Google, Inc.",
 
     versionMajor:1,
     versionMinor:0,
     versionPatch:0,
     version:"1.0",
 
-    depends:"jquery",
+    styles:[
+        "PackageFiles/com.google.fonts/fonts.css"
+    ],
 
-    scripts:"PackageFiles/jqueryAdditions/jqueryAdditions.js",
-
-    class:"autorun"
+    class:"library"
 });
 
 new Package({
@@ -78,6 +78,25 @@ new Package({
     ],
 
     class:"library"
+});
+
+new Package({
+
+    name:"jqueryx",
+    humanname:"jQuery Extensions",
+    id:"com.dangeredwolf.openshell.jqueryx.consts",
+    author:"The OpenShell Foundation",
+
+    versionMajor:1,
+    versionMinor:0,
+    versionPatch:0,
+    version:"1.0",
+
+    depends:"jquery",
+
+    scripts:"PackageFiles/jqueryAdditions/jqueryAdditions.js",
+
+    class:"autorun"
 });
 
 new Package({

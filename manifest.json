@@ -61,7 +61,7 @@
 		"partitions": [
 			{
 				"name":"openshell",
-				"accessible_resources":["Themes/*","CoreApps/*","Resources/*","Apps/*","Libraries/*","Foundation/*","http://*","https://*"]
+				"accessible_resources":["PackageFiles/*","Libraries/*","http://*","https://*"]
 			},
 			{
 				"name":"apps",
@@ -81,9 +81,15 @@
 	},
 
 	"manifest_version": 2,
-	"name": "WebShell",
+	"name": "OpenShell",
 	"offline_enabled": true,
 	"version": "1.0",
+
+	"web_accessible_resources": [
+    	"*.html",
+	    "*.js",
+	    "*.css"
+	 ],
 
 	"app": {
 		"background": {
